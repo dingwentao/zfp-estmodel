@@ -6,6 +6,7 @@
 #include <iostream>
 #include <iomanip>
 #include <string>
+#include <cstring>
 #include "zfpcompress.h"
 
 static double

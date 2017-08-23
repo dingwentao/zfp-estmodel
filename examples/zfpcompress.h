@@ -3,6 +3,7 @@
 
 #include <cstddef>
 #include <sys/time.h>
+#include <stdio.h>
 
 namespace ZFP {
 
