@@ -172,6 +172,54 @@ int main(int argc, char* argv[])
         }
   }
 
+
+
+  /* calculate value-range-based relative error bound */
+  int i = 0;
+  double relEB = pow(2, minexp);
+  double absEB = 0;
+  double range;
+
+  if (!dp)
+  {
+	  float *data = (float*)malloc(mx*my*mz*sizeof(float));
+	  memcpy(data, f, insize);
+	  float maxval, minval;
+	  maxval = data[0];
+	  minval = data[0];
+	  for (i = 0; i < mx*my*mz; i++)
+	  {
+		  if (data[i] > maxval) maxval = data[i];
+		  if (data[i] < minval) minval = data[i];
+	  }
+	  range = maxval - minval;
+	  absEB = relEB*range;
+//	  printf ("value range = %lf\n", range);
+//	  printf ("absolute error bound = %lf\n", absEB);
+	  free(data);
+  }
+  else
+  {
+	  double *data = (double*)malloc(mx*my*mz*sizeof(double));
+	  memcpy(data, f, insize);
+	  double maxval, minval;
+	  maxval = data[0];
+	  minval = data[0];
+	  for (i = 0; i < mx*my*mz; i++)
+	  {
+		  if (data[i] > maxval) maxval = data[i];
+		  if (data[i] < minval) minval = data[i];
+	  }
+	  range = maxval - minval;
+	  absEB = relEB*range;
+//	  printf ("value range = %lf\n", range);
+//	  printf ("absolute error bound = %lf\n", absEB);
+	  free(data);
+  }
+
+  frexp(absEB, &minexp);
+//  printf ("minexp = %d\n", minexp);
+
   // compress data
   outsize = ZFP::compress(f, zip, dp, nx, ny, nz, minbits, maxbits, maxprec, minexp);
   if (outsize == 0) {
@@ -224,7 +272,7 @@ int main(int argc, char* argv[])
   e = sqrt(e / (mx * my * mz));
   double nrmse = e / (fmax - fmin);
 //  double psnr = 20 * log10((fmax - fmin) / (2 * e));
-  double psnr = 20 * log10((fmax - fmin) / (e)); /* change by Dingwen */
+  double psnr = -20 * log10(nrmse); /* change by Dingwen */
   double bitrate = (double)CHAR_BIT*outsize/(mx*my*mz);
   
   //std::cerr << "in=" << insize << " out=" << outsize << " ratio=" << std::setprecision(3) << double(insize) / outsize << " rmse=" << std::setprecision(4) << e << " nrmse=" << nrmse << " maxe=" << emax << " psnr=" << psnr << std::endl;
