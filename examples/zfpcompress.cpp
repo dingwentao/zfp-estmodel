@@ -181,7 +181,6 @@ compress3f(MemoryBitStream& stream, const float* in, uint nx, uint ny, uint nz, 
 
     	index++;
     }
-
   rate  = (float)rd.bit_rate/sampleSize;
   ratio = 32.0/rate;
   rmse = sqrt(rd.mse/sampleSize);

@@ -228,7 +228,6 @@ int main(int argc, char* argv[])
     return EXIT_FAILURE;
   }
 
-
 #if IT_SEEMS_TOO_GOOD_TO_BE_TRUE
   // for skeptics: relocate compressed data
   unsigned char* copy = new unsigned char[outsize];
